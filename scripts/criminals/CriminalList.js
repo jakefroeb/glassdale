@@ -28,7 +28,6 @@ eventHub.addEventListener('crimeChosen', event => {
 eventHub.addEventListener("officerSelected", event => {
   // How can you access the officer name that was selected by the user?
   const officerName = event.detail.officer
-  debugger
 
   // How can you get the criminals that were arrested by that officer?
   const criminals = useCriminals()

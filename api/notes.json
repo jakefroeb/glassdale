@@ -1,0 +1,22 @@
+{
+  "notes": [
+    {
+      "date": "2021-01-01",
+      "title": "Note1",
+      "text": "Looking like some notes",
+      "id": 1
+    },
+    {
+      "date": "2021-01-01",
+      "title": "title",
+      "text": "note text",
+      "id": 2
+    },
+    {
+      "date": "2021-01-01",
+      "title": "title",
+      "text": "Note text",
+      "id": 3
+    }
+  ]
+}

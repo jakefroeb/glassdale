@@ -1,8 +1,17 @@
-.criminalsContainer{
+.criminalsList{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 .criminal__card{
     border: dotted;
+    margin-left: 10px;
+}
+.inputForm{
+    display :flex;
+    flex-direction: column;
+}
+.noteCriminalContainer{
+    display: flex;
+
 }
