@@ -1,4 +1,4 @@
-import { criminal } from "./Criminal.js"
+
 
 let criminals = []
 
