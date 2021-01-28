@@ -1,10 +1,14 @@
 import { getCriminals, useCriminals} from "./CriminalProvider.js"
 import { Criminal} from "./Criminal.js"
 import { useConvictions } from "../convictions/ConvictionProvider.js"
+import { Alibi } from "../alibis/Alibi.js"
+import { getWitnesses, useWitnesses } from "../witnesses/WitnessProvider.js"
+import { WitnessHTMLConverter } from "../witnesses/Witness.js"
 
 
 const eventHub = document.querySelector(".container")
 const contentTarget = document.querySelector(".criminalsContainer")
+const alibiTarget = document.querySelector(".alibiContainer")
 
 // Listen for the custom event you dispatched in ConvictionSelect
 eventHub.addEventListener('crimeChosen', event => {
@@ -25,6 +29,31 @@ eventHub.addEventListener('crimeChosen', event => {
     }
 })
 
+eventHub.addEventListener("showWitnessesClicked", event =>{
+    WitnessList()
+})
+
+const renderWitnesses = (witnesses) =>{
+  let witnessHTMLRepresentation = ""
+  for(const witness of witnesses){
+    witnessHTMLRepresentation += WitnessHTMLConverter(witness)
+  }
+  contentTarget.innerHTML= `
+      <h3>Witnesses</h3>
+      <section class="witnessList">
+      ${witnessHTMLRepresentation}
+      </section>`
+  
+}
+
+const WitnessList = () => {
+  getWitnesses()
+      .then(() => {
+          const allWitnesses = useWitnesses()
+          renderWitnesses(allWitnesses)
+      })
+}
+
 eventHub.addEventListener("officerSelected", event => {
   // How can you access the officer name that was selected by the user?
   const officerName = event.detail.officer
@@ -39,6 +68,20 @@ eventHub.addEventListener("officerSelected", event => {
       }
   )
   render(filteredCriminals);
+})
+
+eventHub.addEventListener("alibiChosen", event => {
+  debugger
+  const criminals = useCriminals()
+  const criminal = criminals[event.detail.alibiThatWasChosen-1]
+  const alibis = criminal.known_associates
+  let alibiHTMLRepresentation = ""
+  for(const alibi of alibis){
+    alibiHTMLRepresentation += Alibi(alibi)
+  }
+  alibiTarget.innerHTML = `
+    <h3>${criminal.name} Alibis</h3>
+    ${alibiHTMLRepresentation}`
 })
 
 const render = criminalCollection => {
@@ -61,4 +104,4 @@ export const CriminalList = () => {
             const appStateCriminals = useCriminals()
             render(appStateCriminals)
         })
-}
+      }
