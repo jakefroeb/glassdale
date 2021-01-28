@@ -7,10 +7,11 @@ const contentTarget = document.querySelector(".noteList")
 const eventHub = document.querySelector(".container")
 
 eventHub.addEventListener("showNotesClicked", customEvent => {
-    debugger
     NoteList();
 })
-
+eventHub.addEventListener("noteStateChanged", customEvent => {
+    NoteList();
+})
 const render = (noteArray) => {
     const allNotesConvertedToStrings = noteArray.map(note => NoteHTMLConverter(note)).join("")
 
