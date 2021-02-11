@@ -1,3 +1,4 @@
+import { getCriminals, useCriminals } from "../criminals/CriminalProvider.js";
 import { saveNote } from "./NoteProvider.js";
 
 const contentTarget = document.querySelector(".noteFormContainer")
@@ -9,8 +10,7 @@ eventHub.addEventListener("click", clickEvent => {
         
         // Make a new object representation of a note
         const newNote = {
-            date : document.querySelector("#noteDate").value,
-            title : document.querySelector("#noteTitle").value,
+            criminalId : document.querySelector("#noteForm--criminal").value,
             text : document.querySelector("#noteText").value,
             // Key/value pairs here
         }
@@ -21,14 +21,14 @@ eventHub.addEventListener("click", clickEvent => {
 })
 
 
-const render = () => {
-    contentTarget.innerHTML = `
+const render = (criminals) => {
+    contentTarget.innerHTML =
+    `
     <form action="">
                 <fieldset class="inputForm">
-                    <label for="noteDate">Date of entry</label>
-                    <input type="date" name="noteDate" id="noteDate">
-                    <label for="noteTitle">Title</label>
-                    <input type="text" name="noteTitle" id="noteTitle">
+                <select id="noteForm--criminal" class="criminalSelect">
+                ${criminals.map(criminal => `<option value="${ criminal.id }">${ criminal.name }</option>)`)}
+                </select>
                     <textarea name="noteText" id="noteText" rows="10" cols="30">Notes</textarea>
                     <button id="saveNote">Save Note</button>
                 </fieldset>             
@@ -37,5 +37,8 @@ const render = () => {
 }
 
 export const NoteForm = () => {
-    render()
+    getCriminals().then(()=>{
+        const criminals = useCriminals()
+        render(criminals)
+    })
 }
