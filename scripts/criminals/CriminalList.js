@@ -4,6 +4,8 @@ import { useConvictions } from "../convictions/ConvictionProvider.js"
 import { Alibi } from "../alibis/Alibi.js"
 import { getWitnesses, useWitnesses } from "../witnesses/WitnessProvider.js"
 import { WitnessHTMLConverter } from "../witnesses/Witness.js"
+import {getFacilities, useFacilities} from "../facilities/FacilityProvider.js"
+import {getCriminalFacilities, useCriminalFacilities} from "../facilities/CriminalFacilityProvider.js"
 
 
 const eventHub = document.querySelector(".container")
@@ -73,6 +75,7 @@ eventHub.addEventListener("officerSelected", event => {
 eventHub.addEventListener("alibiChosen", event => {
   debugger
   const criminals = useCriminals()
+  const criminalId = event.detail.alibiThatWasChosen 
   const criminal = criminals[event.detail.alibiThatWasChosen-1]
   const alibis = criminal.known_associates
   let alibiHTMLRepresentation = ""
@@ -84,24 +87,40 @@ eventHub.addEventListener("alibiChosen", event => {
     ${alibiHTMLRepresentation}`
 })
 
-const render = criminalCollection => {
-  let criminalsHTMLRepresentations = ""
-  for(const criminal of criminalCollection){
-    criminalsHTMLRepresentations += Criminal(criminal)
-  }
-    contentTarget.innerHTML= `
-      <h3>Criminals</h3>
-      <section class="criminalsList">
-      ${criminalsHTMLRepresentations}
-      </section>`
-}
+const render = (criminalsToRender, allFacilities, allRelationships) => {
+  // Step 1 - Iterate all criminals
+  contentTarget.innerHTML = criminalsToRender.map(
+      (criminalObject) => {
+          // Step 2 - Filter all relationships to get only ones for this criminal
+          const facilityRelationshipsForThisCriminal = allRelationships.filter(cf => cf.criminalId === criminalObject.id)
 
+          // Step 3 - Convert the relationships to facilities with map()
+          const facilities = facilityRelationshipsForThisCriminal.map(cf => {
+              const matchingFacilityObject = allFacilities.find(facility => facility.id === cf.facilityId)
+              return matchingFacilityObject
+          })
+
+          // Must pass the matching facilities to the Criminal component
+          return Criminal(criminalObject, facilities)
+      }
+  ).join("")
+}
 
 // Render ALL criminals initally
 export const CriminalList = () => {
-    getCriminals()
-        .then(() => {
-            const appStateCriminals = useCriminals()
-            render(appStateCriminals)
-        })
-      }
+  // Kick off the fetching of both collections of data
+  getCriminals()
+      .then(getFacilities)
+      .then(getCriminalFacilities)
+      .then(
+          () => {
+              // Pull in the data now that it has been fetched
+              const facilities = useFacilities()
+              const crimFac = useCriminalFacilities()
+              const criminals = useCriminals()
+
+              // Pass all three collections of data to render()
+              render(criminals, facilities, crimFac)
+          }
+      )
+}
