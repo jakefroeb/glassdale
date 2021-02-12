@@ -34,7 +34,6 @@ eventHub.addEventListener("click", clickEvent => {
 const render = (noteCollection, criminalCollection) => {
     contentTarget.innerHTML = noteCollection.map(note => {
         // Find the related criminal
-        debugger
         const relatedCriminal = criminalCollection.find(criminal => criminal.id === parseInt(note.criminalId))
 
         return `

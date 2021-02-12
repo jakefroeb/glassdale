@@ -7,6 +7,5 @@ export const useWitnesses = () => {
 export const getWitnesses = async () => {
     const response = await fetch("https://criminals.glassdale.us/witnesses")
     const parsedWitnesses = await response.json()
-    console.table(parsedWitnesses)
     witnesses = parsedWitnesses
 }

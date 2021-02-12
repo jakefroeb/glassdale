@@ -23,7 +23,10 @@ eventHub.addEventListener('crimeChosen', event => {
             Filter the criminals application state down to the people that committed the crime
         */
         let matchingCriminals = useCriminals().filter(currentCriminal => foundConviction.name === currentCriminal.conviction)
-        render(matchingCriminals)
+        
+        const facilities = useFacilities()
+        const crimFac = useCriminalFacilities()
+        render(matchingCriminals, facilities, crimFac)
         /*
             Then invoke render() and pass the filtered collection as
             an argument
@@ -59,7 +62,6 @@ const WitnessList = () => {
 eventHub.addEventListener("officerSelected", event => {
   // How can you access the officer name that was selected by the user?
   const officerName = event.detail.officer
-
   // How can you get the criminals that were arrested by that officer?
   const criminals = useCriminals()
   const filteredCriminals = criminals.filter(
@@ -69,13 +71,13 @@ eventHub.addEventListener("officerSelected", event => {
           }
       }
   )
-  render(filteredCriminals);
+  const facilities = useFacilities()
+  const crimFac = useCriminalFacilities()
+  render(filteredCriminals, facilities, crimFac);
 })
 
 eventHub.addEventListener("alibiChosen", event => {
-  debugger
   const criminals = useCriminals()
-  const criminalId = event.detail.alibiThatWasChosen 
   const criminal = criminals[event.detail.alibiThatWasChosen-1]
   const alibis = criminal.known_associates
   let alibiHTMLRepresentation = ""

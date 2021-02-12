@@ -1,3 +1,9 @@
 {
-  "notes": []
+  "notes": [
+    {
+      "criminalId": "4",
+      "text": "STAMMMER this is a note",
+      "id": 1
+    }
+  ]
 }
