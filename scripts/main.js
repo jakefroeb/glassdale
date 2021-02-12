@@ -8,6 +8,8 @@ import { ShowNoteButton } from "./notes/ShowNotesButton.js";
 import "./notes/NoteList.js"
 import "./alibis/AlibiButtonListener.js"
 import { ShowWitnessButton } from "./witnesses/WitnessButtonListener.js";
+import { ShowFacilityButton } from "./facilities/DisplayFacilitiesButton.js";
+import "./facilities/FacilityList.js"
 
 CriminalList();
 ConvictionSelect();
@@ -15,3 +17,4 @@ OfficerSelect();
 NoteForm();
 ShowNoteButton();
 ShowWitnessButton();
+ShowFacilityButton();
