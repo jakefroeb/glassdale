@@ -3,7 +3,7 @@ import { useCriminalFacilities } from "./CriminalFacilityProvider.js";
 import { useFacilities } from "./FacilityProvider.js";
 import { Facility} from "./Facility.js"
 
-const contentTarget = document.querySelector(".facilityContainer")
+const contentTarget = document.querySelector(".criminalsContainer")
 const eventHub = document.querySelector(".container")
 
 export const facilityList = () =>{
